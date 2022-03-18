@@ -1,0 +1,22 @@
+<h2>{{title}}</h2>
+<form (submit)="addTodo($event)">
+  <input name="task" type="text" />
+  <button type="submit">Add</button>
+</form>
+<ul>
+  <li *ngFor="let todo of filteredList">
+    <!-- [style.textDecoration]="todo.isCompleted ? 'line-through' : ''" -->
+    <div>
+      <label>
+        <input type="checkbox" [checked]="todo.isCompleted" (change)="toggleTodo(todo.id, !todo.isCompleted)" />
+        <span [ngClass]="{ 'completed': todo.isCompleted }">{{todo.task}} - {{todo.isCompleted}}</span>
+        <button (click)="deleteTodo(todo.id)">Delete</button>
+      </label>
+    </div>
+  </li>
+</ul>
+<div>
+  <button (click)="filterTodosBy(filterType.All)">All</button>
+  <button (click)="filterTodosBy(filterType.Active)">Active</button>
+  <button (click)="filterTodosBy(filterType.Completed)">Completed</button>
+</div>
