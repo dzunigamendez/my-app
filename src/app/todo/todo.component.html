@@ -1,0 +1,7 @@
+<div>
+  <label>
+    <input type="checkbox" [checked]="todoInput.isCompleted" (change)="toggleEvent.emit(todoInput.id)" />
+    <span [ngClass]="{ 'completed': todoInput.isCompleted }">{{todoInput.task}}</span>
+  </label>
+  <button (click)="deleteEvent.emit(todoInput.id)">Delete</button>
+</div>

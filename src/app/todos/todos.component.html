@@ -1,22 +1,17 @@
 <h2>{{title}}</h2>
-<form (submit)="addTodo($event)">
-  <input name="task" type="text" />
+<form (ngSubmit)="addTodo()">
+  <input name="task" type="text" [(ngModel)]="task" />
   <button type="submit">Add</button>
 </form>
+<div class="filters">
+  <button (click)="filterTodosBy(filterType.All)" [ngClass]="{'selected': filteredBy === filterType.All}">All</button>
+  <button (click)="filterTodosBy(filterType.Active)"
+    [ngClass]="{'selected': filteredBy === filterType.Active}">Active</button>
+  <button (click)="filterTodosBy(filterType.Completed)"
+    [ngClass]="{'selected': filteredBy === filterType.Completed}">Completed</button>
+</div>
 <ul>
   <li *ngFor="let todo of filteredList">
-    <!-- [style.textDecoration]="todo.isCompleted ? 'line-through' : ''" -->
-    <div>
-      <label>
-        <input type="checkbox" [checked]="todo.isCompleted" (change)="toggleTodo(todo.id, !todo.isCompleted)" />
-        <span [ngClass]="{ 'completed': todo.isCompleted }">{{todo.task}} - {{todo.isCompleted}}</span>
-        <button (click)="deleteTodo(todo.id)">Delete</button>
-      </label>
-    </div>
+    <app-todo [todo]="todo" (toggle)="toggleTodo($event)" (delete)="deleteTodo($event)"></app-todo>
   </li>
 </ul>
-<div>
-  <button (click)="filterTodosBy(filterType.All)">All</button>
-  <button (click)="filterTodosBy(filterType.Active)">Active</button>
-  <button (click)="filterTodosBy(filterType.Completed)">Completed</button>
-</div>

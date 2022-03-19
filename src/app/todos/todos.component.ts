@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FilterType } from '../filter-type';
 import { Todo } from '../todo';
+import { TodoService } from '../todo.service';
 
 function generateId(): string {
   return Math.random().toString(16);
@@ -10,58 +11,41 @@ function generateId(): string {
   selector: 'app-todos',
   templateUrl: './todos.component.html',
   styleUrls: ['./todos.component.css'],
+  providers: [TodoService],
 })
 export class TodosComponent implements OnInit {
   title = 'Todos';
-  list: Todo[] = [];
+  task: string = '';
   filterType = FilterType;
-  filteredBy: FilterType = FilterType.All;
-  filteredList: Todo[] = this.list;
+  filteredBy: FilterType;
+  filteredList: Todo[];
 
-  constructor() {}
+  constructor(private todoService: TodoService) {
+    this.filteredBy = todoService.getFilteredBy();
+    this.filteredList = todoService.getFilteredList();
+  }
 
   ngOnInit(): void {}
 
-  addTodo(event: SubmitEvent) {
-    event.preventDefault();
-    const target = <HTMLFormElement>event.currentTarget;
-    const data = new FormData(target);
-    const task = data.get('task')?.toString();
-    if (task) {
-      this.list.push({ id: generateId(), task, isCompleted: false });
-      this.filterTodosBy(this.filteredBy);
-    }
+  addTodo() {
+    this.todoService.addTodo(this.task);
+    this.filteredList = this.todoService.getFilteredList();
+    this.task = '';
   }
 
-  toggleTodo(id: string, isCompleted: boolean) {
-    this.list = this.list.map((todo) => {
-      if (todo.id === id) {
-        return {
-          ...todo,
-          isCompleted,
-        };
-      }
-      return todo;
-    });
-    this.filterTodosBy(this.filteredBy);
+  toggleTodo(id: string) {
+    this.todoService.toggleTodo(id);
+    this.filteredList = this.todoService.getFilteredList();
   }
 
   deleteTodo(id: string) {
-    this.list = this.list.filter((todo) => todo.id !== id);
-    this.filterTodosBy(this.filteredBy);
+    this.todoService.deleteTodo(id);
+    this.filteredList = this.todoService.getFilteredList();
   }
 
   filterTodosBy(filterType: FilterType) {
-    switch (filterType) {
-      case FilterType.Active:
-        this.filteredList = this.list.filter((todo) => !todo.isCompleted);
-        break;
-      case FilterType.Completed:
-        this.filteredList = this.list.filter((todo) => todo.isCompleted);
-        break;
-      default:
-        this.filteredList = this.list;
-        break;
-    }
+    this.todoService.filterTodosBy(filterType);
+    this.filteredBy = this.todoService.getFilteredBy();
+    this.filteredList = this.todoService.getFilteredList();
   }
 }

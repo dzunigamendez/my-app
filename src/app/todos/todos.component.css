@@ -1,3 +1,8 @@
-.completed {
-  text-decoration: line-through;
+.filters {
+  margin-top: 16px;
+}
+
+.filters .selected {
+  font-weight: bold;
+  border-width: 2px;
 }
