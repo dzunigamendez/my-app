@@ -1,0 +1,22 @@
+.container {
+  max-width: 500px;
+  margin: 0 auto;
+}
+
+label {
+  display: block;
+}
+
+input,
+select {
+  display: block;
+  width: 100%;
+}
+
+.field + .field {
+  margin-top: 12px;
+}
+
+button {
+  margin-top: 24px;
+}

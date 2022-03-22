@@ -1,3 +1,4 @@
+import { HttpClient } from '@angular/common/http';
 import { Component, Input, OnInit, Output, EventEmitter } from '@angular/core';
 import { Todo } from '../todo';
 import { TodoService } from '../todo.service';
@@ -9,10 +10,16 @@ import { TodoService } from '../todo.service';
 })
 export class TodoComponent implements OnInit {
   @Input('todo') todoInput!: Todo;
-  @Output('toggle') toggleEvent = new EventEmitter();
-  @Output('delete') deleteEvent = new EventEmitter();
 
   constructor(private todoService: TodoService) {}
 
   ngOnInit(): void {}
+
+  toggleTodo(id: string) {
+    this.todoService.toggleTodo(id);
+  }
+
+  deleteTodo(id: string) {
+    this.todoService.deleteTodo(id);
+  }
 }

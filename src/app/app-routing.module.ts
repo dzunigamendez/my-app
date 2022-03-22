@@ -1,6 +1,7 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { EchoComponent } from './echo/echo.component';
+import { SignUpComponent } from './sign-up/sign-up.component';
 import { TodosComponent } from './todos/todos.component';
 
 const routes: Routes = [
@@ -16,6 +17,10 @@ const routes: Routes = [
   {
     path: 'echo',
     component: EchoComponent,
+  },
+  {
+    path: 'sign-up',
+    component: SignUpComponent,
   },
 ];
 

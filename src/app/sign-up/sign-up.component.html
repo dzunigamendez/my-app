@@ -1,0 +1,36 @@
+<div class="container">
+  <h2>Registrar una cuenta</h2>
+  <form #signUpForm="ngForm" (ngSubmit)="signUpForm.valid && createAccount()">
+    <p>{{signUpForm.submitted}}</p>
+    <div class="field">
+      <label for="name">Nombre</label>
+      <input id="name" name="name" type="text" [(ngModel)]="account.name" required minlength="4" #name="ngModel" />
+      <div *ngIf="signUpForm.submitted && name.invalid && name.errors">
+        <p *ngIf="name.errors['required']">Nombre es requerido</p>
+        <p *ngIf="name.errors['minlength']">Se require {{name.errors['minlength'].requiredLength}} caracteres mínimo</p>
+      </div>
+    </div>
+    <div class="field">
+      <label for="email">Email</label>
+      <input id="email" name="email" type="email" [(ngModel)]="account.email" required />
+    </div>
+    <div class="field">
+      <label for="position">Cargo</label>
+      <select id="position" name="position" [(ngModel)]="account.position" required>
+        <option value="front-end">Front-End Developer</option>
+        <option value="back-end">Back-End Developer</option>
+        <option value="full-stack">Full-Stack Developer</option>
+      </select>
+    </div>
+    <div class="field">
+      <label for="password">Contraseña</label>
+      <input id="password" name="password" type="password" [(ngModel)]="account.password" required />
+    </div>
+    <div class="field">
+      <label for="confirmPassword">Confirmar Contraseña</label>
+      <input id="confirmPassword" name="confirmPassword" type="password" [(ngModel)]="account.confirmPassword"
+        required />
+    </div>
+    <button type="submit">Enviar</button>
+  </form>
+</div>

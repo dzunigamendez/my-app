@@ -1,3 +1,4 @@
+import { BehaviorSubject, combineLatest, map, Observable } from 'rxjs';
 import { FilterType } from './filter-type';
 import { Todo } from './todo';
 
@@ -6,8 +7,9 @@ function generateId(): string {
 }
 
 export class TodoService {
-  private filteredBy: FilterType = FilterType.All;
-  private list: Todo[] = [
+  // rxjs /// Observable <- Subject <- BehaviorSubject
+  private filteredBy$ = new BehaviorSubject<FilterType>(FilterType.All);
+  private list$ = new BehaviorSubject<Todo[]>([
     {
       id: generateId(),
       task: 'JavaScript',
@@ -23,28 +25,44 @@ export class TodoService {
       task: 'Angular',
       isCompleted: false,
     },
-  ];
-  private filteredList: Todo[] = this.list;
+  ]);
 
-  getList() {
-    return this.list;
+  getList(): Observable<Todo[]> {
+    return this.list$.asObservable();
   }
 
-  getFilteredList() {
-    return this.filteredList;
+  // Observable (filteredList) ---> combineLatest --> filteredBy$ + list$
+  getFilteredList(): Observable<Todo[]> {
+    return combineLatest([this.filteredBy$, this.list$]).pipe(
+      map(([filteredBy, list]) => {
+        switch (filteredBy) {
+          case FilterType.Active:
+            return list.filter((todo) => !todo.isCompleted);
+          case FilterType.Completed:
+            return list.filter((todo) => todo.isCompleted);
+          default:
+            return list;
+        }
+      })
+    );
   }
 
-  getFilteredBy() {
-    return this.filteredBy;
+  getFilteredBy(): Observable<FilterType> {
+    return this.filteredBy$;
   }
 
   addTodo(task: string) {
-    this.list.push({ id: generateId(), task, isCompleted: false });
-    this.filterTodosBy(this.filteredBy);
+    const newTodo: Todo = {
+      id: generateId(),
+      task,
+      isCompleted: false,
+    };
+    const newList = [...this.list$.getValue(), newTodo];
+    this.list$.next(newList);
   }
 
   toggleTodo(id: string) {
-    this.list = this.list.map((todo) => {
+    const updatedList = this.list$.getValue().map((todo) => {
       if (todo.id === id) {
         return {
           ...todo,
@@ -53,26 +71,15 @@ export class TodoService {
       }
       return todo;
     });
-    this.filterTodosBy(this.filteredBy);
+    this.list$.next(updatedList);
   }
 
   deleteTodo(id: string) {
-    this.list = this.list.filter((todo) => todo.id !== id);
-    this.filterTodosBy(this.filteredBy);
+    const nextList = this.list$.getValue().filter((todo) => todo.id !== id);
+    this.list$.next(nextList);
   }
 
-  filterTodosBy(filterType: FilterType) {
-    this.filteredBy = filterType;
-    switch (filterType) {
-      case FilterType.Active:
-        this.filteredList = this.list.filter((todo) => !todo.isCompleted);
-        break;
-      case FilterType.Completed:
-        this.filteredList = this.list.filter((todo) => todo.isCompleted);
-        break;
-      default:
-        this.filteredList = this.list;
-        break;
-    }
+  filterTodosBy(filteredBy: FilterType) {
+    this.filteredBy$.next(filteredBy);
   }
 }

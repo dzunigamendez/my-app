@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { Observable } from 'rxjs';
 import { FilterType } from '../filter-type';
 import { Todo } from '../todo';
 import { TodoService } from '../todo.service';
@@ -17,35 +18,30 @@ export class TodosComponent implements OnInit {
   title = 'Todos';
   task: string = '';
   filterType = FilterType;
-  filteredBy: FilterType;
-  filteredList: Todo[];
+  filteredBy$: Observable<FilterType>;
+  filteredList$: Observable<Todo[]>;
 
   constructor(private todoService: TodoService) {
-    this.filteredBy = todoService.getFilteredBy();
-    this.filteredList = todoService.getFilteredList();
+    this.filteredBy$ = this.todoService.getFilteredBy();
+    this.filteredList$ = this.todoService.getFilteredList();
   }
 
   ngOnInit(): void {}
 
   addTodo() {
     this.todoService.addTodo(this.task);
-    this.filteredList = this.todoService.getFilteredList();
     this.task = '';
   }
 
   toggleTodo(id: string) {
     this.todoService.toggleTodo(id);
-    this.filteredList = this.todoService.getFilteredList();
   }
 
   deleteTodo(id: string) {
     this.todoService.deleteTodo(id);
-    this.filteredList = this.todoService.getFilteredList();
   }
 
   filterTodosBy(filterType: FilterType) {
     this.todoService.filterTodosBy(filterType);
-    this.filteredBy = this.todoService.getFilteredBy();
-    this.filteredList = this.todoService.getFilteredList();
   }
 }
