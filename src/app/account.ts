@@ -1,7 +1,6 @@
 export interface Account {
-  name: string;
+  username: string;
   email: string;
-  position: string;
   password: string;
   confirmPassword: string;
 }
