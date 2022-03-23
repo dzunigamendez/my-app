@@ -15,7 +15,8 @@
         <div class="mb-3">
           <label for="username" class="form-label">Nombre de Usuario</label>
           <div class="input-group" [ngClass]="{ 'is-invalid': showError('username')}">
-            <input id="username" name="username" type="text" class="form-control" formControlName="username" />
+            <input id="username" name="username" type="text" class="form-control" formControlName="username"
+              [ngClass]="{ 'is-invalid': showError('username')}" />
             <span *ngIf="signUpForm.controls['username'].pending" class="input-group-text">
               <span class="spinner-border spinner-border-sm" role="status">
                 <span class="visually-hidden">Verificando disponibilidad de Nombre de Usuario...</span>
@@ -24,6 +25,8 @@
           </div>
           <div *ngIf="showError('username')" class="invalid-feedback">
             <p *ngIf="hasError('username', 'required')">El Nombre de Usuario es requerido</p>
+            <p *ngIf="hasError('username', 'minlength')">El Nombre de Usuario debe tener mínimo 4 caracteres</p>
+            <p *ngIf="hasError('username', 'maxlength')">El Nombre de Usuario debe tener máximo 8 caracteres</p>
             <p *ngIf="hasError('username', 'forbiddenName')">El Nombre de Usuario no esta permitido</p>
             <p *ngIf="hasError('username', 'uniqueUsername')">El Nombre de Usuario no esta disponible</p>
           </div>

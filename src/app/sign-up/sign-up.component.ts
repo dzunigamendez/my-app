@@ -96,9 +96,7 @@ export class SignUpComponent implements OnInit {
     if (!control) {
       return false;
     }
-    return (
-      (this.submitted || control.touched) && this.hasError(formControlName)
-    );
+    return (this.submitted || control.touched) && control.invalid;
   }
 
   hasError(formControlName: string, errorName?: string): boolean {
@@ -106,12 +104,9 @@ export class SignUpComponent implements OnInit {
     if (!control) {
       return false;
     }
-    if (control.valid || !control.errors) {
-      return false;
-    }
     if (!errorName) {
       return control.invalid;
     }
-    return control.errors[errorName];
+    return control.hasError(errorName);
   }
 }
