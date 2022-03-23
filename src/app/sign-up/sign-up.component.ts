@@ -10,10 +10,10 @@ import { map, Observable, of } from 'rxjs';
 import { Account } from '../account';
 import { AccountService } from '../account.service';
 
-function forbiddenNameValidator(exp: RegExp) {
+function forbiddenUsernameValidator(exp: RegExp) {
   return (control: AbstractControl): ValidationErrors | null => {
     const forbidden = exp.test(control.value);
-    return forbidden ? { forbiddenName: true } : null;
+    return forbidden ? { forbiddenUsername: true } : null;
   };
 }
 
@@ -39,8 +39,13 @@ function matchValidator(
   return (control: AbstractControl): ValidationErrors | null => {
     const formControl = control.get(formControlName);
     const matchingFormControl = control.get(matchingFormControlName);
+    if (!formControl || !matchingFormControl) {
+      return null;
+    }
     if (formControl?.value !== matchingFormControl?.value) {
       matchingFormControl?.setErrors({ match: true });
+    } else {
+      matchingFormControl?.setErrors(null);
     }
     return null;
   };
@@ -61,7 +66,7 @@ export class SignUpComponent implements OnInit {
           Validators.required,
           Validators.minLength(4),
           Validators.maxLength(8),
-          forbiddenNameValidator(/admin/i),
+          forbiddenUsernameValidator(/admin/i),
         ],
         asyncValidators: [uniqueUsernameValidator(this.accountService)],
       }),
