@@ -3,52 +3,73 @@
     <div class="col-12 col-lg-8">
       <h2>Registrar una cuenta</h2>
       <form [formGroup]="signUpForm" (ngSubmit)="createAccount()">
-        <div class="mb-3">
-          <label for="email" class="form-label">Correo Electrónico</label>
+
+        <fieldset formGroupName="address">
+          <legend>Dirección</legend>
+          <div class="row">
+            <app-form-field id="street1" label="Calle Principal" class="col-12 col-lg-5">
+              <input id="street1" name="street1" type="text" class="form-control" formControlName="street1"
+                [ngClass]="{ 'is-invalid': showError('address.street1')}" />
+              <app-form-error name="required" [showDefaultError]="false">Valor es requerido</app-form-error>
+            </app-form-field>
+            <app-form-field id="num" label="Num" class="col-12 col-lg-2">
+              <input id="num" name="num" type="text" class="form-control" formControlName="num"
+                [ngClass]="{ 'is-invalid': showError('address.num')}" />
+            </app-form-field>
+            <app-form-field id="street2" label="Calle Secundaria" class="col-12 col-lg-5">
+              <input id="street2" name="street2" type="text" class="form-control" formControlName="street2"
+                [ngClass]="{ 'is-invalid': showError('address.street2')}" />
+            </app-form-field>
+          </div>
+        </fieldset>
+
+        <hr class="bg-primary" />
+
+        <app-form-field id="email" label="Correo Electrónico">
           <input id="email" name="email" type="email" class="form-control" formControlName="email"
             [ngClass]="{ 'is-invalid': showError('email')}" />
-          <div *ngIf="showError('email')" class="invalid-feedback">
-            <p *ngIf="hasError('email', 'required')">El Correo Electrónico es requerida</p>
-            <p *ngIf="hasError('email', 'email')">El Correo Electrónico es invalido</p>
-          </div>
-        </div>
-        <div class="mb-3">
-          <label for="username" class="form-label">Nombre de Usuario</label>
-          <div class="input-group" [ngClass]="{ 'is-invalid': showError('username')}">
-            <input id="username" name="username" type="text" class="form-control" formControlName="username"
-              [ngClass]="{ 'is-invalid': showError('username')}" />
-            <span *ngIf="signUpForm.controls['username'].pending" class="input-group-text">
-              <span class="spinner-border spinner-border-sm" role="status">
-                <span class="visually-hidden">Verificando disponibilidad de Nombre de Usuario...</span>
-              </span>
-            </span>
-          </div>
-          <div *ngIf="showError('username')" class="invalid-feedback">
-            <p *ngIf="hasError('username', 'required')">El Nombre de Usuario es requerido</p>
-            <p *ngIf="hasError('username', 'minlength')">El Nombre de Usuario debe tener mínimo 4 caracteres</p>
-            <p *ngIf="hasError('username', 'maxlength')">El Nombre de Usuario debe tener máximo 8 caracteres</p>
-            <p *ngIf="hasError('username', 'forbiddenName')">El Nombre de Usuario no esta permitido</p>
-            <p *ngIf="hasError('username', 'uniqueUsername')">El Nombre de Usuario no esta disponible</p>
-          </div>
-        </div>
-        <div class="mb-3">
-          <label for="password" class="form-label">Contraseña</label>
+          <app-form-error name="required"></app-form-error>
+          <app-form-error name="email"></app-form-error>
+        </app-form-field>
+
+        <app-form-field id="username" label="Nombre de Usuario">
+          <input id="username" name="username" type="text" class="form-control" formControlName="username"
+            [ngClass]="{ 'is-invalid': showError('username')}" />
+          <app-form-error name="required"></app-form-error>
+          <app-form-error name="minlength"></app-form-error>
+          <app-form-error name="maxlength"></app-form-error>
+          <app-form-error name="forbiddenUsername">forbiddenUsername</app-form-error>
+          <app-form-error name="uniqueUsername">uniqueUsername</app-form-error>
+        </app-form-field>
+
+        <app-form-field id="password" label="Constraseña">
           <input id="password" name="password" type="password" class="form-control" formControlName="password"
             [ngClass]="{ 'is-invalid': showError('password')}" />
-          <div *ngIf="showError('password')" class="invalid-feedback">
-            <p *ngIf="hasError('password', 'required')">La contraseña es requerida</p>
-            <p *ngIf="hasError('password', 'minlength')">La contraseña debe tener mínimo 6 caracteres</p>
-          </div>
-        </div>
-        <div class="mb-3">
-          <label for="confirmPassword" class="form-label">Confirmar Contraseña</label>
+          <app-form-error name="required"></app-form-error>
+          <app-form-error name="minlength"></app-form-error>
+        </app-form-field>
+
+        <app-form-field id="confirmPassword" label="Confirmar Constraseña">
           <input id="confirmPassword" name="confirmPassword" type="password" class="form-control"
             formControlName="confirmPassword" [ngClass]="{ 'is-invalid': showError('confirmPassword')}" />
-          <div *ngIf="showError('confirmPassword')" class="invalid-feedback">
-            <p *ngIf="hasError('confirmPassword', 'required')">Confirmar la contraseña es requerido</p>
-            <p *ngIf="hasError('confirmPassword', 'match')">Las contraseñas no coinciden</p>
-          </div>
-        </div>
+          <app-form-error name="match">match</app-form-error>
+        </app-form-field>
+
+        <hr class="bg-primary" />
+
+        <app-form-field id="acceptTerms" label="Aceptar Términos y Condiciones">
+          <app-form-label [ngClass]="{ 'is-invalid': showError('acceptTerms')}">
+            <div class="form-check">
+              <input id="acceptTerms" class="form-check-input" type="checkbox" formControlName="acceptTerms"
+                [ngClass]="{ 'is-invalid': showError('acceptTerms')}">
+              <label class="form-check-label" for="acceptTerms">
+                Aceptar Términos y Condiciones
+              </label>
+            </div>
+          </app-form-label>
+          <app-form-error name="required"></app-form-error>
+        </app-form-field>
+
         <button type="submit" class="btn btn-primary">Enviar</button>
       </form>
     </div>

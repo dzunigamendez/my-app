@@ -1,0 +1,4 @@
+<div *ngIf="hasError">
+  <p *ngIf="showDefaultError && errorMessage">{{errorMessage}}</p>
+  <ng-content></ng-content>
+</div>

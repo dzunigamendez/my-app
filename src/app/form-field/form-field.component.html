@@ -1,0 +1,13 @@
+<div class="mb-3">
+  <label *ngIf="!formLabelContent" [for]="id" class="form-label">
+    {{label}}
+    <span *ngIf="required && !pending" class="text-primary text-bold">*</span>
+    <span *ngIf="pending" class="spinner-border spinner-border-sm text-primary" role="status">
+    </span>
+  </label>
+  <ng-content select="app-form-label"></ng-content>
+  <ng-content></ng-content>
+  <div class="invalid-feedback">
+    <ng-content select="app-form-error"></ng-content>
+  </div>
+</div>

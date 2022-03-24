@@ -60,6 +60,11 @@ export class SignUpComponent implements OnInit {
   submitted = false;
   signUpForm = new FormGroup(
     {
+      address: new FormGroup({
+        street1: new FormControl('', Validators.required),
+        num: new FormControl(''),
+        street2: new FormControl(''),
+      }),
       email: new FormControl('', [Validators.required, Validators.email]),
       username: new FormControl('', {
         validators: [
@@ -75,6 +80,7 @@ export class SignUpComponent implements OnInit {
         Validators.minLength(6),
       ]),
       confirmPassword: new FormControl('', [Validators.required]),
+      acceptTerms: new FormControl(false, [Validators.requiredTrue]),
     },
     {
       validators: [matchValidator('password', 'confirmPassword')],
@@ -113,5 +119,13 @@ export class SignUpComponent implements OnInit {
       return control.invalid;
     }
     return control.hasError(errorName);
+  }
+
+  isRequired(formControlName: string): boolean {
+    const control = this.signUpForm.get(formControlName);
+    if (!control) {
+      return false;
+    }
+    return control.hasValidator(Validators.required);
   }
 }

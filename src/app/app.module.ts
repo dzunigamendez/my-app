@@ -12,6 +12,9 @@ import { EchoService } from './echo.service';
 import { TodoComponent } from './todo/todo.component';
 import { HttpClientModule } from '@angular/common/http';
 import { SignUpComponent } from './sign-up/sign-up.component';
+import { FormFieldComponent } from './form-field/form-field.component';
+import { FormErrorComponent } from './form-error/form-error.component';
+import { FormLabelComponent } from './form-label/form-label.component';
 
 @NgModule({
   declarations: [
@@ -22,6 +25,9 @@ import { SignUpComponent } from './sign-up/sign-up.component';
     EchoOutputComponent,
     TodoComponent,
     SignUpComponent,
+    FormFieldComponent,
+    FormErrorComponent,
+    FormLabelComponent,
   ],
   imports: [
     BrowserModule,
