@@ -10,12 +10,19 @@ import { EchoOutputComponent } from './echo-output/echo-output.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { EchoService } from './echo.service';
 import { TodoComponent } from './todo/todo.component';
-import { HttpClientModule } from '@angular/common/http';
+import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { SignUpComponent } from './sign-up/sign-up.component';
 import { FormFieldComponent } from './form-field/form-field.component';
 import { FormErrorComponent } from './form-error/form-error.component';
 import { FormLabelComponent } from './form-label/form-label.component';
+import { LoginComponent } from './login/login.component';
+import { AuthInterceptor } from './auth.interceptor';
+import { ErrorInterceptor } from './error.interceptor';
 
+export const httpInterceptorProviders = [
+  { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true },
+  { provide: HTTP_INTERCEPTORS, useClass: ErrorInterceptor, multi: true },
+];
 @NgModule({
   declarations: [
     AppComponent,
@@ -28,6 +35,7 @@ import { FormLabelComponent } from './form-label/form-label.component';
     FormFieldComponent,
     FormErrorComponent,
     FormLabelComponent,
+    LoginComponent,
   ],
   imports: [
     BrowserModule,
@@ -36,7 +44,7 @@ import { FormLabelComponent } from './form-label/form-label.component';
     ReactiveFormsModule,
     HttpClientModule,
   ],
-  providers: [EchoService],
+  providers: [EchoService, httpInterceptorProviders],
   bootstrap: [AppComponent],
 })
 export class AppModule {}

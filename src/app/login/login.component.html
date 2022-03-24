@@ -1,0 +1,23 @@
+<div class="container">
+  <div class="row justify-content-center">
+    <div class="col-12 col-lg-6">
+      <h2 class="text-center">Login</h2>
+      <form [formGroup]="formGroup" (ngSubmit)="login()">
+        <app-form-field id="identifier" label="Nombre de Usuario / Correo Electrónico">
+          <input id="identifier" type="email" class="form-control" formControlName="identifier"
+            [ngClass]="{'is-invalid': showError('identifier')}">
+          <app-form-error name="required"></app-form-error>
+        </app-form-field>
+        <app-form-field id="password" label="Contraseña">
+          <input id="password" type="password" class="form-control" formControlName="password"
+            [ngClass]="{'is-invalid': showError('password')}">
+          <app-form-error name="required"></app-form-error>
+        </app-form-field>
+        <div *ngIf="isBadRequest" class="alert alert-danger" role="alert">
+          Nombre de Usuario o Contraseña incorrecta
+        </div>
+        <button type="submit" class="btn btn-primary">Ingresar</button>
+      </form>
+    </div>
+  </div>
+</div>

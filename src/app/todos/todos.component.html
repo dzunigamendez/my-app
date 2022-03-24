@@ -1,18 +1,26 @@
-<h2>{{title}}</h2>
-<form (ngSubmit)="addTodo()">
-  <input name="task" type="text" [(ngModel)]="task" />
-  <button type="submit">Add</button>
-</form>
-<div class="filters">
-  <button (click)="filterTodosBy(filterType.All)"
-    [ngClass]="{'selected': (filteredBy$ | async) === filterType.All}">All</button>
-  <button (click)="filterTodosBy(filterType.Active)"
-    [ngClass]="{'selected': (filteredBy$ | async) === filterType.Active}">Active</button>
-  <button (click)="filterTodosBy(filterType.Completed)"
-    [ngClass]="{'selected': (filteredBy$ | async) === filterType.Completed}">Completed</button>
+<div class="container">
+  <div class="row justify-content-center">
+    <div class="col-12 col-lg-6">
+      <h2 class="text-center">{{title}}</h2>
+      <form (ngSubmit)="addTodo()" class="mb-3">
+        <div class="input-group">
+          <input name="task" type="text" class="form-control" [(ngModel)]="task" />
+          <button type="submit" class="btn btn-primary">Add</button>
+        </div>
+      </form>
+      <div class="btn-group mb-3">
+        <button class="btn btn-outline-primary" (click)="filterTodosBy(filterType.All)"
+          [ngClass]="{'active': (filteredBy$ | async) === filterType.All}">All</button>
+        <button class="btn btn-outline-primary" (click)="filterTodosBy(filterType.Active)"
+          [ngClass]="{'active': (filteredBy$ | async) === filterType.Active}">Active</button>
+        <button class="btn btn-outline-primary" (click)="filterTodosBy(filterType.Completed)"
+          [ngClass]="{'active': (filteredBy$ | async) === filterType.Completed}">Completed</button>
+      </div>
+      <ul class="list-group">
+        <li *ngFor="let todo of filteredList$ | async" class="list-group-item">
+          <app-todo [todo]="todo"></app-todo>
+        </li>
+      </ul>
+    </div>
+  </div>
 </div>
-<ul>
-  <li *ngFor="let todo of filteredList$ | async">
-    <app-todo [todo]="todo"></app-todo>
-  </li>
-</ul>

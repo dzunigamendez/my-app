@@ -1,85 +1,105 @@
-import { BehaviorSubject, combineLatest, map, Observable } from 'rxjs';
+import { HttpClient } from '@angular/common/http';
+import { Injectable } from '@angular/core';
+import { BehaviorSubject, Observable, Subscription } from 'rxjs';
 import { FilterType } from './filter-type';
-import { Todo } from './todo';
+import { NewTodo, ServerTodosResponse, Todo } from './todo';
 
-function generateId(): string {
-  return Math.random().toString(16);
-}
-
+@Injectable()
 export class TodoService {
   // rxjs /// Observable <- Subject <- BehaviorSubject
+  private url = 'https://nameless-scrubland-86239.herokuapp.com/api/todos';
   private filteredBy$ = new BehaviorSubject<FilterType>(FilterType.All);
-  private list$ = new BehaviorSubject<Todo[]>([
-    {
-      id: generateId(),
-      task: 'JavaScript',
-      isCompleted: true,
-    },
-    {
-      id: generateId(),
-      task: 'TypeScript',
-      isCompleted: false,
-    },
-    {
-      id: generateId(),
-      task: 'Angular',
-      isCompleted: false,
-    },
-  ]);
+  private list$ = new BehaviorSubject<Todo[]>([]);
+  private suscription: Subscription;
 
-  getList(): Observable<Todo[]> {
-    return this.list$.asObservable();
-  }
-
-  // Observable (filteredList) ---> combineLatest --> filteredBy$ + list$
-  getFilteredList(): Observable<Todo[]> {
-    return combineLatest([this.filteredBy$, this.list$]).pipe(
-      map(([filteredBy, list]) => {
-        switch (filteredBy) {
-          case FilterType.Active:
-            return list.filter((todo) => !todo.isCompleted);
-          case FilterType.Completed:
-            return list.filter((todo) => todo.isCompleted);
-          default:
-            return list;
-        }
-      })
+  constructor(private httpClient: HttpClient) {
+    this.suscription = this.filteredBy$.subscribe((filteredBy) =>
+      this.refreshList(filteredBy)
     );
   }
 
+  getFilteredList(): Observable<Todo[]> {
+    return this.list$.asObservable();
+  }
+
   getFilteredBy(): Observable<FilterType> {
-    return this.filteredBy$;
+    return this.filteredBy$.asObservable();
   }
 
   addTodo(task: string) {
-    const newTodo: Todo = {
-      id: generateId(),
+    const newTodo: NewTodo = {
       task,
       isCompleted: false,
     };
-    const newList = [...this.list$.getValue(), newTodo];
-    this.list$.next(newList);
+    this.httpClient
+      .post(this.url, {
+        data: newTodo,
+      })
+      .subscribe(() => {
+        this.refreshList(this.filteredBy$.getValue());
+      });
   }
 
   toggleTodo(id: string) {
-    const updatedList = this.list$.getValue().map((todo) => {
-      if (todo.id === id) {
-        return {
-          ...todo,
-          isCompleted: !todo.isCompleted,
-        };
-      }
-      return todo;
-    });
-    this.list$.next(updatedList);
+    const todo = this.list$.getValue().find((todo) => todo.id === id);
+    if (todo) {
+      const patch = { isCompleted: !todo.isCompleted };
+      this.httpClient
+        .put(`${this.url}/${id}`, {
+          data: patch,
+        })
+        .subscribe(() => {
+          this.refreshList(this.filteredBy$.getValue());
+        });
+    }
   }
 
   deleteTodo(id: string) {
-    const nextList = this.list$.getValue().filter((todo) => todo.id !== id);
-    this.list$.next(nextList);
+    this.httpClient.delete(`${this.url}/${id}`).subscribe(() => {
+      this.refreshList(this.filteredBy$.getValue());
+    });
   }
 
   filterTodosBy(filteredBy: FilterType) {
     this.filteredBy$.next(filteredBy);
   }
+
+  ngOnDestroy() {
+    this.suscription.unsubscribe();
+  }
+
+  private refreshList(filteredBy: FilterType) {
+    let getUrl = `${this.url}?sort=createdAt`;
+    let filters;
+    switch (filteredBy) {
+      case FilterType.Active:
+        filters = '[isCompleted][$eq]=false';
+        break;
+      case FilterType.Completed:
+        filters = '[isCompleted][$eq]=true';
+        break;
+      default:
+        filters = null;
+        break;
+    }
+    getUrl = filters ? `${getUrl}&filters${filters}` : getUrl;
+    this.httpClient.get<ServerTodosResponse>(getUrl).subscribe((res) => {
+      const todos = res.data.map((serverTodo) => ({
+        id: serverTodo.id,
+        task: serverTodo.attributes.task,
+        isCompleted: serverTodo.attributes.isCompleted,
+      }));
+      this.list$.next(todos);
+    });
+  }
+
+  // private getHeaders(): { [header: string]: string } | undefined {
+  //   const token = this.authService.getToken();
+  //   if (!token) {
+  //     return;
+  //   }
+  //   return {
+  //     Authorization: `Bearer ${token}`,
+  //   };
+  // }
 }

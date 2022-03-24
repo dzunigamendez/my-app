@@ -6,6 +6,7 @@ import {
   ValidationErrors,
   Validators,
 } from '@angular/forms';
+import { Router } from '@angular/router';
 import { map, Observable, of } from 'rxjs';
 import { Account } from '../account';
 import { AccountService } from '../account.service';
@@ -70,7 +71,7 @@ export class SignUpComponent implements OnInit {
         validators: [
           Validators.required,
           Validators.minLength(4),
-          Validators.maxLength(8),
+          Validators.maxLength(12),
           forbiddenUsernameValidator(/admin/i),
         ],
         asyncValidators: [uniqueUsernameValidator(this.accountService)],
@@ -87,7 +88,7 @@ export class SignUpComponent implements OnInit {
     }
   );
 
-  constructor(private accountService: AccountService) {}
+  constructor(private router: Router, private accountService: AccountService) {}
 
   ngOnInit(): void {}
 
@@ -95,8 +96,8 @@ export class SignUpComponent implements OnInit {
     console.log(this.signUpForm.errors);
     if (this.signUpForm.valid) {
       const account: Account = this.signUpForm.value;
-      this.accountService.register(account).subscribe((res) => {
-        console.log(res);
+      this.accountService.register(account).subscribe(() => {
+        this.router.navigateByUrl('/login');
       });
     }
     this.submitted = true;

@@ -1,7 +1,9 @@
-<div>
-  <label>
-    <input type="checkbox" [checked]="todoInput.isCompleted" (change)="toggleTodo(todoInput.id)" />
-    <span [ngClass]="{ 'completed': todoInput.isCompleted }">{{todoInput.task}}</span>
-  </label>
-  <button (click)="deleteTodo(todoInput.id)">Delete</button>
+<div class="d-flex justify-content-between align-items-center">
+  <div class="form-check">
+    <input [id]="todoInput.id" type="checkbox" class="form-check-input" [checked]="todoInput.isCompleted"
+      (change)="toggleTodo(todoInput.id)" />
+    <label [for]="todoInput.id" class="form-check-label"
+      [ngClass]="{ 'text-decoration-line-through': todoInput.isCompleted }">{{todoInput.task}}</label>
+  </div>
+  <button (click)="deleteTodo(todoInput.id)" class="btn btn-outline-danger">Delete</button>
 </div>
