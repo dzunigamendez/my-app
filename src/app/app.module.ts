@@ -10,7 +10,11 @@ import { EchoOutputComponent } from './echo-output/echo-output.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { EchoService } from './echo.service';
 import { TodoComponent } from './todo/todo.component';
-import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
+import {
+  HttpClientJsonpModule,
+  HttpClientModule,
+  HTTP_INTERCEPTORS,
+} from '@angular/common/http';
 import { SignUpComponent } from './sign-up/sign-up.component';
 import { FormFieldComponent } from './form-field/form-field.component';
 import { FormErrorComponent } from './form-error/form-error.component';
@@ -18,8 +22,8 @@ import { FormLabelComponent } from './form-label/form-label.component';
 import { LoginComponent } from './login/login.component';
 import { AuthInterceptor } from './auth.interceptor';
 import { ErrorInterceptor } from './error.interceptor';
-import { AgmCoreModule } from '@agm/core';
 import { MapComponent } from './map/map.component';
+import { GoogleMapsModule } from '@angular/google-maps';
 
 export const httpInterceptorProviders = [
   { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true },
@@ -46,9 +50,8 @@ export const httpInterceptorProviders = [
     FormsModule,
     ReactiveFormsModule,
     HttpClientModule,
-    AgmCoreModule.forRoot({
-      apiKey: 'APP_KEY_HERE',
-    }),
+    HttpClientJsonpModule,
+    GoogleMapsModule,
   ],
   providers: [EchoService, httpInterceptorProviders],
   bootstrap: [AppComponent],
