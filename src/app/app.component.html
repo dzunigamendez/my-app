@@ -1,12 +1,15 @@
 <header class="container mb-5">
   <h1 class="text-center">{{title}}</h1>
-  <nav>
+  <nav class="d-flex justify-content-between">
     <ul class="nav nav-pills">
       <li class="nav-item"><a class="nav-link" routerLink="/" routerLinkActive="active"
           [routerLinkActiveOptions]="{ exact: true}">Home</a></li>
       <li class="nav-item"><a class="nav-link" routerLink="/feature" routerLinkActive="active">Feature</a></li>
       <li class="nav-item"><a class="nav-link" routerLink="/todos" routerLinkActive="active">Todos</a></li>
       <li class="nav-item"><a class="nav-link" routerLink="/echo" routerLinkActive="active">Echo</a></li>
+      <li class="nav-item"><a class="nav-link" routerLink="/map" routerLinkActive="active">Map</a></li>
+    </ul>
+    <ul class="nav nav-pills">
       <li class="nav-item" *ngIf="!(isAuthenticated$ | async)"><a class="nav-link" routerLink="/sign-up"
           routerLinkActive="active">Registrarse</a></li>
       <li class="nav-item" *ngIf="!(isAuthenticated$ | async)"><a class="nav-link" routerLink="/login"

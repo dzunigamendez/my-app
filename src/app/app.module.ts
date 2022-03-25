@@ -18,6 +18,8 @@ import { FormLabelComponent } from './form-label/form-label.component';
 import { LoginComponent } from './login/login.component';
 import { AuthInterceptor } from './auth.interceptor';
 import { ErrorInterceptor } from './error.interceptor';
+import { AgmCoreModule } from '@agm/core';
+import { MapComponent } from './map/map.component';
 
 export const httpInterceptorProviders = [
   { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true },
@@ -36,6 +38,7 @@ export const httpInterceptorProviders = [
     FormErrorComponent,
     FormLabelComponent,
     LoginComponent,
+    MapComponent,
   ],
   imports: [
     BrowserModule,
@@ -43,6 +46,9 @@ export const httpInterceptorProviders = [
     FormsModule,
     ReactiveFormsModule,
     HttpClientModule,
+    AgmCoreModule.forRoot({
+      apiKey: 'APP_KEY_HERE',
+    }),
   ],
   providers: [EchoService, httpInterceptorProviders],
   bootstrap: [AppComponent],

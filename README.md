@@ -1,5 +1,12 @@
 # MyApp
 
+## Angular Google Maps
+
+```bash
+npm install @agm/core --legacy-peer-deps
+npm install --save-dev @types/googlemaps@3.39.12
+```
+
 This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 13.2.3.
 
 ## Development server

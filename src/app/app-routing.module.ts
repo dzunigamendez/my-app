@@ -2,6 +2,7 @@ import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { EchoComponent } from './echo/echo.component';
 import { LoginComponent } from './login/login.component';
+import { MapComponent } from './map/map.component';
 import { SignUpComponent } from './sign-up/sign-up.component';
 import { TodosComponent } from './todos/todos.component';
 
@@ -26,6 +27,10 @@ const routes: Routes = [
   {
     path: 'login',
     component: LoginComponent,
+  },
+  {
+    path: 'map',
+    component: MapComponent,
   },
 ];
 
