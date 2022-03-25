@@ -24,6 +24,9 @@ import { AuthInterceptor } from './auth.interceptor';
 import { ErrorInterceptor } from './error.interceptor';
 import { MapComponent } from './map/map.component';
 import { GoogleMapsModule } from '@angular/google-maps';
+import { AccordionDemoComponent } from './accordion-demo/accordion-demo.component';
+import { AccordionComponent } from './accordion/accordion.component';
+import { AccordionItemComponent } from './accordion-item/accordion-item.component';
 
 export const httpInterceptorProviders = [
   { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true },
@@ -43,6 +46,9 @@ export const httpInterceptorProviders = [
     FormLabelComponent,
     LoginComponent,
     MapComponent,
+    AccordionDemoComponent,
+    AccordionComponent,
+    AccordionItemComponent,
   ],
   imports: [
     BrowserModule,

@@ -1,0 +1,13 @@
+<div class="accordion-item">
+  <div class="accordion-header" [id]="id + '_header'">
+    <button class="accordion-button" type="button" (click)="toggle()" [attr.aria-expanded]="expanded"
+      [attr.aria-controls]="id" [ngClass]="{'collapsed': !expanded }">
+      {{label}}
+    </button>
+  </div>
+  <div [id]="id" class="accordion-collapse" [attr.aria-labelledby]="id + '_header'" [style.maxHeight.px]="bodyHeight">
+    <div #accordionBody class="accordion-body">
+      <ng-content></ng-content>
+    </div>
+  </div>
+</div>
